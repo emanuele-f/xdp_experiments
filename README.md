@@ -21,7 +21,7 @@ make oldconfig
 ```
 cd linux/tools/lib/bpf
 make
-export CFLAGS="-I../../include -I../../include/uapi -I../../include -I../../tools/lib -I../../tools/testing/selftests/bpf"
+export CFLAGS="-I../../include/uapi -I../../include -I../../tools/lib -I../../tools/testing/selftests/bpf"
 ```
 
 4. Compile userspace app
@@ -32,6 +32,7 @@ LDFLAGS="-L../../tools/lib/bpf -lbpf -lelf -lpthread" make xdpsock_user
 
 5. Compile kernelspace app
 ```
+cd linux/samples/bpf
 clang $(echo $CFLAGS) -fno-stack-protector -c xdpsock_kern.c -D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign  -Wno-compare-distinct-pointer-types -Wno-gnu-variable-sized-type-not-at-end -Wno-address-of-packed-member -Wno-tautological-compare -Wno-unknown-warning-option -O2 -emit-llvm -c -o -| llc -march=bpf -filetype=obj  -o xdpsock_user_kern.o
 ```
 
